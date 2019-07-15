@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>SONAR 2019</title>
+    </h:head>
+    <h:body>
+        <p:growl>
+            <p:autoUpdate/>
+        </p:growl>
+
+        <h:form>
+            <p:panel header="Sistema de Calificacion de Concursos / 2019">
+                <p:messages/>
+                <p:tabMenu>
+                    <p:menuitem value="Inicio" outcome="index.xhtml" icon="pi pi-star">
+                        <f:param name="i" value="0" />
+                    </p:menuitem>
+                    <p:menuitem value="Mensaje"  actionListener="#{controller.mostrarMensaje()}" icon="pi pi-search">
+                        <f:param name="j" value="1" />
+                    </p:menuitem>>
+                    <p:menuitem value="Social" outcome="index.xhtml" icon="pi pi-user">
+                        <f:param name="k" value="4" />
+                    </p:menuitem>
+                </p:tabMenu>
+                <p:button onclick="mensaje()" value="ALERT"></p:button>
+            </p:panel>
+        </h:form>
+
+        <h:panelGrid columns="2">
+            <h:form id="form0">
+                <p:panel header="MANEJO DE CONCURSOS">
+                    <p:panelGrid columns="2">
+                        <h:outputText value="ID:" />
+                        <h:outputText value="#{controller.concurso.conId}" />
+                        <h:outputText value="NOMBRE:" />
+                        <p:inputText value="#{controller.concurso.conNombre}" required="true"
+                                     requiredMessage="Especifique nombre" />
+                        <h:outputText value="DESCRIPCION:" />
+                        <p:selectOneMenu id="iddescripcion" value="#{controller.concurso.conDescripcion}" style="width:125px">
+                            <f:selectItem itemLabel="MAZORCA" itemValue="MAZORCA" />
+                            <f:selectItem itemLabel="SONAR" itemValue="SONAR" />
+                        </p:selectOneMenu>
+                        <p:commandButton value="GUARDAR CONCURSO" icon="ui-icon-refresh"	update=":form1,:form1:tabla1"
+                                         actionListener="#{controller.guardarConcurso()}">
+                        </p:commandButton>
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+            <h:form id="form1">
+                <p:panel header="LISTA DE CONCURSOS">
+                    <p:dataTable value="#{controller.listaConcursos}" var="b" id="tabla1">
+                        <p:column headerText="ID">
+                            <h:outputText value="#{b.conId}" />
+                        </p:column>
+                        <p:column headerText="NOMBRE">
+                            <h:outputText value="#{b.conNombre}" />
+                        </p:column>
+                        <p:column headerText="DESCRIPCION">
+                            <h:outputText value="#{b.conDescripcion}" />
+                        </p:column>
+                        <p:column headerText="OPCIONES">
+                            <p:commandButton action="#{controller.entrarConcurso(b.conId)}"
+                                             title="Entrar" icon="ui-icon-door">
+                            </p:commandButton>
+                            <p:commandButton actionListener="#{controller.cargarConcurso(b.conId)}"
+                                             oncomplete="PF('dialogo1').show()" update=":form2" 
+                                             title="Editar" icon="ui-icon-pencil">
+                            </p:commandButton>
+                            <p:commandButton update="@form,:form1:tabla1"
+                                             actionListener="#{controller.eliminarConcurso(b.conId)}"
+                                             title="Eliminar" icon="ui-icon-close">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                </p:panel>
+            </h:form>
+        </h:panelGrid>
+
+        <br />
+        <p:dialog header="Edición" widgetVar="dialogo1"
+                  id="dialogo1" modal="true" height="200">
+            <h:form id="form2">
+                <p:messages></p:messages>
+                <p:panelGrid columns="2">
+                    <h:outputText value="ID" />
+                    <h:outputText value="#{controller.concurso.conId}" />
+                    <h:outputText value="NOMBRE:" />
+                    <p:inputText value="#{controller.concurso.conNombre}"
+                                 required="true" />
+                    <h:outputText value="DESCRIPCION:" />
+                    <p:selectOneMenu id="iddescripcion" value="#{controller.concurso.conDescripcion}" style="width:125px">
+                        <f:selectItem itemLabel="SONAR" itemValue="SONAR" />
+                        <f:selectItem itemLabel="MAZORCA" itemValue="MAZORCA" />
+                    </p:selectOneMenu>
+                    <p:commandButton value="Actualizar" update="@form,:form0,:form1,:form1:tabla1"
+                                     actionListener="#{controller.editarConcurso()}"></p:commandButton>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
+    </h:body>
+
+    <script type="javascript">
+        function mensaje()
+        {
+        alert('Hola Mundo');
+        }
+    </script>
+
+</html>
+

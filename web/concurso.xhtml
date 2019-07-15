@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <title>CONCURSO</title>
+    </h:head>
+    <h:body>
+        <p:growl>
+            <p:autoUpdate/>
+        </p:growl>
+        <h:form>
+            <p:panel header="Sistema de Calificacion / SONAR 2019">
+                <p:messages/>
+                <p:tabMenu>
+                    <p:menuitem value="Inicio" outcome="index.xhtml" icon="pi pi-star">
+                        <f:param name="i" value="0" />
+                    </p:menuitem>
+                    <p:menuitem value="Mensaje"  actionListener="#{controller.mostrarMensaje()}" icon="pi pi-search">
+                        <f:param name="j" value="1" />
+                    </p:menuitem>>
+                    <p:menuitem value="Social" outcome="index.xhtml" icon="pi pi-user">
+                        <f:param name="k" value="4" />
+                    </p:menuitem>
+                </p:tabMenu>
+                <p:button onclick="mensaje()" value="ALERT"></p:button>
+            </p:panel>
+            <p:panelGrid columns="2">
+                <h:outputText value="NOMBRE:" />
+                <p:inputText value="#{controller.participante.parNombre}" required="true"
+                             requiredMessage="Especifique nombre" />
+                <h:outputText value="CATEGORIA:" />
+                <p:selectOneMenu id="iddescripcion" value="#{controller.participante.parCategoria}" style="width:125px">
+                    <f:selectItem itemLabel="SOLISTA" itemValue="SOLISTA" />
+                    <f:selectItem itemLabel="DUOS" itemValue="DUOS" />
+                    <f:selectItem itemLabel="TRIOS" itemValue="TRIOS" />
+                    <f:selectItem itemLabel="GRUPOS" itemValue="GRUPOS" />
+                </p:selectOneMenu>
+                <p:commandButton value="AGREGAR PARTICIPANTE" icon="ui-icon-refresh"	update="@form,:form1:tabla1"
+                                 actionListener="#{controller.guardarParticipante()}">
+                </p:commandButton>
+            </p:panelGrid>
+        </h:form>
+        <h:form id="form1">
+            <p:panel header="LISTA DE PARTICIPANTES">
+                <p:dataTable value="#{controller.concurso.tblparticipanteList}" var="b" id="tabla1">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{b.parId}" />
+                    </p:column>
+                    <p:column headerText="NOMBRE">
+                        <h:outputText value="#{b.parNombre}" />
+                    </p:column>
+                    <p:column headerText="CATEGORIA">
+                        <h:outputText value="#{b.parCategoria}" />
+                    </p:column>
+                    <p:column headerText="COMPAS">
+                        <h:outputText value="#{b.parPuntajeCompas}" />
+                    </p:column>
+                    <p:column headerText="DOMINIO ESCENICO">
+                        <h:outputText value="#{b.parPuntajeDominioescenico}" />
+                    </p:column>
+                    <p:column headerText="PRESENTACION">
+                        <h:outputText value="#{b.parPuntajePresentacion}" />
+                    </p:column>
+                    <p:column headerText="VOCALIZACION">
+                        <h:outputText value="#{b.parPuntajeVocalizacion}" />
+                    </p:column>
+                    <p:column headerText="RESULTADO">
+                        <h:outputText value="#{b.parPuntajeResultado}" />
+                    </p:column>
+                    <p:column headerText="OPCIONES">
+                        <p:commandButton actionListener="#{controller.cargarParticipante(b.parId)}"
+                                         oncomplete="PF('dialogo1').show()" update=":form2" 
+                                         title="Editar" icon="ui-icon-pencil">
+                        </p:commandButton>
+                        <p:commandButton update="@form,:form1:tabla1"
+                                         actionListener="#{controller.eliminarParticipante(b.parId)}"
+                                         title="Eliminar" icon="ui-icon-close">
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+            </p:panel>
+
+        </h:form>
+        
+        <p:dialog header="EDITAR" widgetVar="dialogo1"
+                  id="dialogo1" modal="true">
+            <h:form id="form2">
+                <p:messages></p:messages>
+                <p:panelGrid columns="2">
+                    <h:outputText value="ID" />
+                    <h:outputText value="#{controller.participante.parId}" />
+                    <h:outputText value="NOMBRE:" />
+
+                    <p:inputText value="#{controller.participante.parNombre}"
+                                 required="true" />
+                    <h:outputText value="CATEGORIA" />
+                    <p:selectOneMenu id="iddescripcion" value="#{controller.participante.parCategoria}" style="width:125px">
+                        <f:selectItem itemLabel="SOLISTA" itemValue="SONAR" />
+                        <f:selectItem itemLabel="DUOS" itemValue="DUOS" />
+                        <f:selectItem itemLabel="TRIOS" itemValue="TRIOS" />
+                        <f:selectItem itemLabel="GRUPOS" itemValue="GRUPOS" />
+                    </p:selectOneMenu>
+                    <h:outputText value="COMPAS:" />
+                    <p:inputNumber value="#{controller.participante.parPuntajeCompas}"
+                                   required="true" requiredMessage="CALIFICAR" />
+                    <h:outputText value="DOMINIO ESCENICO:" />
+                    <p:inputNumber value="#{controller.participante.parPuntajeDominioescenico}"
+                                   required="true" requiredMessage="CALIFICAR" />
+                    <h:outputText value="PRESENTACION:" />
+                    <p:inputNumber value="#{controller.participante.parPuntajePresentacion}"
+                                   required="true" requiredMessage="CALIFICAR" />
+                    <h:outputText value="VOCALIZACION:" />
+                    <p:inputNumber value="#{controller.participante.parPuntajeVocalizacion}"
+                                   required="true" requiredMessage="CALIFICAR" />
+                    <p:commandButton value="Actualizar" update="@form,:form1,:form1:tabla1"
+                                     actionListener="#{controller.editarParticipante()}"></p:commandButton>
+
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
+    </h:body>    
+</html>

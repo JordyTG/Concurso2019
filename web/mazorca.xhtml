@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <title>MAZORCA</title>
+    </h:head>
+    <h:body>
+        <p:growl>
+            <p:autoUpdate/>
+        </p:growl>
+        <h:form>
+            <p:panel header="Sistema de Calificacion / SONAR 2019">
+                <p:messages/>
+                <p:tabMenu>
+                    <p:menuitem value="Inicio" outcome="index.xhtml" icon="pi pi-star">
+                        <f:param name="i" value="0" />
+                    </p:menuitem>
+                    <p:menuitem value="Mensaje"  actionListener="#{controller.mostrarMensaje()}" icon="pi pi-search">
+                        <f:param name="j" value="1" />
+                    </p:menuitem>>
+                    <p:menuitem value="Social" outcome="index.xhtml" icon="pi pi-user">
+                        <f:param name="k" value="4" />
+                    </p:menuitem>
+                </p:tabMenu>
+                <p:button onclick="mensaje()" value="ALERT"></p:button>
+            </p:panel>
+            <p:panelGrid columns="2">
+                <h:outputText value="NOMBRE:" />
+                <p:inputText value="#{controller.grupo.gruNombre}" required="true"
+                             requiredMessage="Especifique nombre" />
+                <p:commandButton value="AGREGAR GRUPO" icon="ui-icon-refresh"	update="@form,:form1:tabla1"
+                                 actionListener="#{controller.guardarGrupo()}">
+                </p:commandButton>
+            </p:panelGrid>
+        </h:form>
+        <h:form id="form1">
+            <p:panel header="LISTA DE PARTICIPANTES">
+                <p:dataTable value="#{controller.concurso.tblgrupoList}" var="b" id="tabla1">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{b.gruId}" />
+                    </p:column>
+                    <p:column headerText="NOMBRE">
+                        <h:outputText value="#{b.gruNombre}" />
+                    </p:column>
+                    <p:column headerText="AUTENTICIDAD">
+                        <h:outputText value="#{b.gruPuntajeAutenticidad}" />
+                    </p:column>
+                    <p:column headerText="COREOGRAFIA">
+                        <h:outputText value="#{b.gruPuntajeCoreografia}" />
+                    </p:column>
+                    <p:column headerText="EXPRESION CORPORAL">
+                        <h:outputText value="#{b.gruPuntajeExpresioncorporal}" />
+                    </p:column>
+                    <p:column headerText="VESTUARIO">
+                        <h:outputText value="#{b.gruPuntajeVestuario}" />
+                    </p:column>
+                    <p:column headerText="RESULTADO">
+                        <h:outputText value="#{b.gruPuntajeResultado}" />
+                    </p:column>
+                    <p:column headerText="OPCIONES">
+                        <p:commandButton actionListener="#{controller.cargarGrupo(b.gruId)}"
+                                         oncomplete="PF('dialogo1').show()" update=":form2" 
+                                         title="Editar" icon="ui-icon-pencil">
+                        </p:commandButton>
+                        <p:commandButton update="@form,:form1:tabla1"
+                                         actionListener="#{controller.eliminarGrupo(b.gruId)}"
+                                         title="Eliminar" icon="ui-icon-close">
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+            </p:panel>
+
+        </h:form>
+
+        <p:dialog header="EDITAR" widgetVar="dialogo1"
+                  id="dialogo1" modal="true" >
+            <h:form id="form2">
+                <p:messages></p:messages>
+                <p:panelGrid columns="2">
+                    <h:outputText value="ID" />
+                    <h:outputText value="#{controller.grupo.gruId}" />
+                    <h:outputText value="NOMBRE:" />
+                    <p:inputText value="#{controller.grupo.gruNombre}"
+                                 required="true" />
+                    <h:outputText value="AUTENTICIDAD:" />
+                    <p:inputNumber value="#{controller.grupo.gruPuntajeAutenticidad}"
+                                   required="true" requiredMessage="CALIFICAR" />
+                    <h:outputText value="COREOGRAFIA" />
+                    <p:inputNumber value="#{controller.grupo.gruPuntajeCoreografia}"
+                                   required="true" requiredMessage="CALIFICAR" />
+                    <h:outputText value="EXPRESION CORPORAL:" />
+                    <p:inputNumber value="#{controller.grupo.gruPuntajeExpresioncorporal}"
+                                   required="true" requiredMessage="CALIFICAR" />
+                    <h:outputText value="VESTUARIO:" />
+                    <p:inputNumber value="#{controller.grupo.gruPuntajeVestuario}"
+                                   required="true" requiredMessage="CALIFICAR" />
+                    <p:commandButton value="Actualizar" update="@form,:form1,:form1:tabla1"
+                                     actionListener="#{controller.editarGrupo()}">
+                        <p:confirm header="Confirmation" message="Estas seguro?" icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>
+
+                </p:panelGrid>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Sí" type="button"
+                                     styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                    <p:commandButton value="No" type="button"
+                                     styleClass="ui-confirmdialog-no" icon="fa fa-times" />
+                </p:confirmDialog>
+            </h:form>
+        </p:dialog>
+
+
+    </h:body>    
+</html>
